@@ -1,0 +1,11 @@
+.env
+.worktrees/
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.python-version
+results/raw.jsonl
+results/run_log.jsonl
+results/analysis/
