@@ -21,7 +21,7 @@ def run_trial(prompt: str) -> dict:
     cached_tokens = prompt_details.cached_tokens if prompt_details else 0
 
     # completion_tokens includes reasoning; output_tokens is the visible text only
-    output_tokens = usage.completion_tokens - reasoning_tokens
+    output_tokens = max(0, usage.completion_tokens - reasoning_tokens)
 
     return {
         "response_text": response.choices[0].message.content,

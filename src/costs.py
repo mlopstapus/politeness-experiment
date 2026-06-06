@@ -11,6 +11,8 @@ def calculate_cost(
     output_tokens: int,
     reasoning_tokens: int,
 ) -> float:
+    if model not in MODEL_PRICING:
+        raise ValueError(f"Unknown model: {model!r}. Must be one of {list(MODEL_PRICING)}")
     pricing = MODEL_PRICING[model]
     input_cost = (input_tokens / 1_000_000) * pricing["input"]
     # Reasoning tokens are billed at the output rate on all three models
