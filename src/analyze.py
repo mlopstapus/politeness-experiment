@@ -28,6 +28,8 @@ def load_results(path: Path = RESULTS_PATH) -> pd.DataFrame:
 
 
 def make_clean(df: pd.DataFrame) -> pd.DataFrame:
+    if "cached_tokens" not in df.columns:
+        return df.copy()
     return df[df["cached_tokens"] == 0].copy()
 
 
@@ -41,6 +43,12 @@ def save_trials_csv(df: pd.DataFrame, output_dir: Path = ANALYSIS_DIR) -> None:
 def save_summary_csv(df: pd.DataFrame, output_dir: Path = ANALYSIS_DIR) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     clean = make_clean(df)
+    # Compute cache_hit_rate from the full df before cleaning
+    hit_rates = (
+        df.groupby(["model", "variant"])
+        .agg(cache_hit_rate=("cached_tokens", lambda x: (x > 0).mean()))
+        .reset_index()
+    )
     summary = (
         clean.groupby(["model", "variant"])
         .agg(
@@ -51,11 +59,15 @@ def save_summary_csv(df: pd.DataFrame, output_dir: Path = ANALYSIS_DIR) -> None:
             avg_input_tokens=("input_tokens", "mean"),
             avg_total_tokens=("total_tokens", "mean"),
             avg_cost_usd=("cost_usd", "mean"),
-            cache_hit_rate=("cached_tokens", lambda x: (x > 0).mean()),
         )
-        .round(2)
         .reset_index()
+        .merge(hit_rates, on=["model", "variant"])
     )
+    # Round token/count columns to 1dp, cost columns to 6dp to avoid zeroing
+    token_cols = [c for c in summary.columns if "tokens" in c or c == "n_trials"]
+    cost_cols = [c for c in summary.columns if "cost" in c or "rate" in c]
+    summary[token_cols] = summary[token_cols].round(1)
+    summary[cost_cols] = summary[cost_cols].round(6)
     summary.to_csv(output_dir / "summary.csv", index=False)
 
 
@@ -66,7 +78,11 @@ def main() -> None:
     args = parser.parse_args()
 
     df = load_results(args.results)
-    cache_hits = (df["cached_tokens"] > 0).sum()
+    if df.empty:
+        print("No trials found.")
+        return
+
+    cache_hits = int((df["cached_tokens"] > 0).sum())
     print(f"Loaded {len(df)} trials. Cache hits: {cache_hits} ({cache_hits / len(df) * 100:.1f}%)")
 
     save_trials_csv(df, args.output)

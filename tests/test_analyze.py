@@ -2,7 +2,7 @@ import pandas as pd
 from pathlib import Path
 from src.analyze import load_results, make_clean, save_trials_csv, save_summary_csv
 
-FIXTURE = Path("tests/fixtures/sample_results.jsonl")
+FIXTURE = Path(__file__).parent / "fixtures" / "sample_results.jsonl"
 
 
 def test_load_results_count():
