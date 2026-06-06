@@ -1,4 +1,4 @@
-from typing import TypedDict, Optional
+from typing import TypedDict
 
 MODELS = ["claude-opus-4-8", "claude-sonnet-4-6", "gpt-5.5"]
 VARIANTS = ["bare", "polite", "overly_polite"]
@@ -25,4 +25,4 @@ class TrialRecord(TypedDict):
     cost_usd: float
     timestamp: str
     latency_ms: int
-    quality: Optional[dict]
+    quality: dict | None
