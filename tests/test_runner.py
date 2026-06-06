@@ -62,10 +62,12 @@ def test_build_trial_record_fields():
         "total_tokens": 390,
         "latency_ms": 1200,
     }
-    record = build_trial_record(task, "claude-opus-4-8", "bare", 1, api_result)
+    prompt = "Summarize the following text:\n\nSome content here."
+    record = build_trial_record(task, "claude-opus-4-8", "bare", 1, api_result, prompt)
     assert record["trial_id"] == "claude-opus-4-8|T01|bare|1"
     assert record["reasoning_tokens"] == 250
     assert isinstance(record["cost_usd"], float)
     assert record["cost_usd"] > 0
     assert "timestamp" in record
     assert record["quality"] is None
+    assert record["prompt_text"] == prompt

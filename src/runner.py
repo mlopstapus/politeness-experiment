@@ -12,7 +12,8 @@ from src.schema import MODELS, VARIANTS, REPS, make_trial_id
 from src.prompts import build_prompt
 from src.costs import calculate_cost
 
-load_dotenv()
+ANTHROPIC_MODELS = [m for m in MODELS if m.startswith("claude")]
+OPENAI_MODELS = [m for m in MODELS if not m.startswith("claude")]
 
 CORPUS_PATH = Path("corpus/tasks.json")
 RESULTS_PATH = Path("results/raw.jsonl")
@@ -20,6 +21,8 @@ RUN_LOG_PATH = Path("results/run_log.jsonl")
 
 
 def load_corpus(path: Path = CORPUS_PATH) -> list[dict]:
+    if not path.exists():
+        raise RuntimeError(f"{path} not found — run from the project root")
     with path.open() as f:
         return json.load(f)
 
@@ -51,7 +54,7 @@ def generate_all_trials(corpus: list[dict]) -> list[tuple]:
 
 
 def build_trial_record(
-    task: dict, model: str, variant: str, rep: int, api_result: dict
+    task: dict, model: str, variant: str, rep: int, api_result: dict, prompt: str
 ) -> dict:
     return {
         "trial_id": make_trial_id(model, task["task_id"], variant, rep),
@@ -59,7 +62,7 @@ def build_trial_record(
         "task_id": task["task_id"],
         "variant": variant,
         "rep": rep,
-        "prompt_text": build_prompt(task["content"], variant),
+        "prompt_text": prompt,
         "response_text": api_result["response_text"],
         "input_tokens": api_result["input_tokens"],
         "output_tokens": api_result["output_tokens"],
@@ -85,14 +88,18 @@ def append_result(record: dict, path: Path = RESULTS_PATH) -> None:
 
 
 def _call_api(model: str, prompt: str) -> dict:
-    if model.startswith("claude"):
+    if model in ANTHROPIC_MODELS:
         from src.models.anthropic import run_trial
         return run_trial(prompt, model=model)
-    from src.models.openai import run_trial
-    return run_trial(prompt)
+    if model in OPENAI_MODELS:
+        from src.models.openai import run_trial
+        return run_trial(prompt)
+    raise ValueError(f"Unknown model: {model!r}. Must be one of {MODELS}")
 
 
 def main() -> None:
+    load_dotenv()
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", choices=MODELS + ["all"], default="all")
     parser.add_argument("--dry-run", action="store_true")
@@ -115,7 +122,8 @@ def main() -> None:
         if make_trial_id(m, t["task_id"], v, r) not in completed
     ]
 
-    print(f"Total: {len(all_trials)}  Completed: {len(completed)}  Pending: {len(pending)}  Seed: {seed}")
+    scoped_completed = len(all_trials) - len(pending)
+    print(f"Total: {len(all_trials)}  Completed: {scoped_completed}  Pending: {len(pending)}  Seed: {seed}")
 
     if args.dry_run:
         print("Dry run — no API calls made.")
@@ -136,7 +144,7 @@ def main() -> None:
             print(f"\nERROR {tid}: {e}", file=sys.stderr)
             errors += 1
             continue
-        append_result(build_trial_record(task, model, variant, rep, api_result))
+        append_result(build_trial_record(task, model, variant, rep, api_result, prompt))
 
     print(f"\nDone. Errors: {errors}")
 
