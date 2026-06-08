@@ -9,7 +9,7 @@ def run_trial(prompt: str) -> dict:
     response = client.chat.completions.create(
         model="gpt-5.5",
         max_completion_tokens=4096,
-        reasoning={"effort": "high"},
+        reasoning_effort="high",
         messages=[{"role": "user", "content": prompt}],
     )
     latency_ms = int((time.monotonic() - start) * 1000)
