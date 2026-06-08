@@ -58,7 +58,7 @@ def test_model_and_no_reasoning_effort_override(mock_class):
     kwargs = mock_client.chat.completions.create.call_args[1]
     assert kwargs["model"] == "gpt-5.5"
     assert kwargs["max_completion_tokens"] == 4096
-    assert "reasoning_effort" not in kwargs
+    assert kwargs["reasoning_effort"] == "high"
     assert "temperature" not in kwargs
 
 

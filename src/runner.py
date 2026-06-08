@@ -18,6 +18,8 @@ OPENAI_MODELS = [m for m in MODELS if not m.startswith("claude")]
 CORPUS_PATH = Path("corpus/tasks.json")
 RESULTS_PATH = Path("results/raw.jsonl")
 RUN_LOG_PATH = Path("results/run_log.jsonl")
+REASONING_CORPUS_PATH = Path("corpus/tasks_reasoning.json")
+REASONING_RESULTS_PATH = Path("results/raw_reasoning.jsonl")
 
 
 def load_corpus(path: Path = CORPUS_PATH) -> list[dict]:
@@ -104,10 +106,15 @@ def main() -> None:
     parser.add_argument("--model", choices=MODELS + ["all"], default="all")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--corpus", type=Path, default=CORPUS_PATH)
+    parser.add_argument("--results", type=Path, default=RESULTS_PATH)
     args = parser.parse_args()
 
-    corpus = load_corpus()[:TASKS]
-    completed = load_completed_trials()
+    results_path = args.results
+    run_log_path = results_path.parent / "run_log.jsonl"
+
+    corpus = load_corpus(args.corpus)[:TASKS]
+    completed = load_completed_trials(results_path)
     all_trials = generate_all_trials(corpus)
 
     if args.model != "all":
@@ -129,14 +136,15 @@ def main() -> None:
         print("Dry run — no API calls made.")
         return
 
-    RUN_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with RUN_LOG_PATH.open("a") as f:
+    run_log_path.parent.mkdir(parents=True, exist_ok=True)
+    with run_log_path.open("a") as f:
         f.write(json.dumps({"seed": seed, "pending": len(pending),
                              "timestamp": datetime.now(timezone.utc).isoformat()}) + "\n")
 
     errors = 0
     for task, model, variant, rep in tqdm(pending, desc="Running trials"):
-        prompt = build_prompt(task["content"], variant)
+        style = task.get("prompt_style", "summarize")
+        prompt = build_prompt(task["content"], variant, style=style)
         try:
             api_result = _call_api(model, prompt)
         except Exception as e:
@@ -144,7 +152,7 @@ def main() -> None:
             print(f"\nERROR {tid}: {e}", file=sys.stderr)
             errors += 1
             continue
-        append_result(build_trial_record(task, model, variant, rep, api_result, prompt))
+        append_result(build_trial_record(task, model, variant, rep, api_result, prompt), results_path)
 
     print(f"\nDone. Errors: {errors}")
 

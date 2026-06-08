@@ -1,0 +1,107 @@
+[
+  {
+    "task_id": "R01",
+    "title": "Bird and trains",
+    "topic": "rate_problems",
+    "prompt_style": "solve",
+    "content": "Two trains depart simultaneously from cities 480 miles apart, traveling toward each other. Train A travels at 70 mph and Train B travels at 50 mph. At the moment of departure, a bird takes off from Train A's city flying toward Train B at 120 mph. When the bird reaches Train B, it immediately turns around and flies back toward Train A. It continues flying back and forth between the two trains until the trains meet.\n\nHow many miles does the bird fly in total? Show your reasoning step by step."
+  },
+  {
+    "task_id": "R02",
+    "title": "Work rate problem",
+    "topic": "rate_problems",
+    "prompt_style": "solve",
+    "content": "Alice can complete a project in 8 days working alone. Bob can complete the same project in 12 days alone. They start working together, but after 2 days Bob leaves. Alice continues alone, and Carol joins her. Together Alice and Carol finish the remaining work in exactly 1 day.\n\nHow long would Carol take to complete the entire project working alone? Show all steps."
+  },
+  {
+    "task_id": "R03",
+    "title": "Reverse percentage chain",
+    "topic": "rate_problems",
+    "prompt_style": "solve",
+    "content": "A retailer marks up items by 40% above wholesale cost. During a sale, the store applies a 25% discount to the marked-up price. A loyalty member then receives a further 10% discount on that reduced price. Finally, the customer uses a $5 coupon on top of everything.\n\nIf a loyalty member paid a final price of $60.75, what was the original wholesale cost of the item? Show your work."
+  },
+  {
+    "task_id": "R04",
+    "title": "Age problem",
+    "topic": "algebra",
+    "prompt_style": "solve",
+    "content": "A father is currently 4 times as old as his son. In 5 years, the father will be exactly 3 times as old as his son.\n\n(a) How old are the father and son right now?\n(b) In how many years from now will the father be exactly twice as old as the son?\n\nShow your algebraic setup and solve step by step."
+  },
+  {
+    "task_id": "R05",
+    "title": "Acid mixture",
+    "topic": "algebra",
+    "prompt_style": "solve",
+    "content": "A chemist has 200 ml of a 30% acid solution. She wants to make a solution that is exactly 55% acid by adding some quantity of a 70% acid solution.\n\n(a) How many ml of the 70% solution must she add?\n(b) What will the total volume of the final solution be?\n(c) If she accidentally makes too much and needs exactly 300 ml of 55% solution, how much of her mixture should she discard?\n\nShow full working."
+  },
+  {
+    "task_id": "R06",
+    "title": "Knights and knaves",
+    "topic": "logic",
+    "prompt_style": "solve",
+    "content": "On an island, knights always tell the truth and knaves always lie. You meet four inhabitants: Alex, Blake, Casey, and Drew.\n\n- Alex says: 'Blake is a knave.'\n- Blake says: 'Casey and Drew are both knights.'\n- Casey says: 'Alex is a knight.'\n- Drew says: 'Exactly two of the four of us are knights.'\n\nDetermine whether each person is a knight or a knave. Prove your answer by showing that your solution is consistent with all statements and that all other possibilities lead to contradictions."
+  },
+  {
+    "task_id": "R07",
+    "title": "Geometric sequence pattern",
+    "topic": "sequences",
+    "prompt_style": "solve",
+    "content": "A sequence begins: 2, 5, 11, 23, 47, ...\n\n(a) Identify the pattern and find the next three terms.\n(b) Write a formula for the nth term.\n(c) What is the smallest value of n for which the nth term first exceeds 10,000?\n(d) What is the sum of the first 10 terms?\n\nShow all working."
+  },
+  {
+    "task_id": "R08",
+    "title": "Task scheduling constraints",
+    "topic": "logic",
+    "prompt_style": "solve",
+    "content": "Five tasks (A, B, C, D, E) must be scheduled into 5 consecutive time slots (slots 1 through 5), one task per slot. The following constraints apply:\n\n1. A must come before C (not necessarily immediately).\n2. B must come before D (not necessarily immediately).\n3. C must be immediately before D (C in slot n, D in slot n+1).\n4. E must not be in slot 3.\n5. A cannot be in slot 4 or 5.\n\nHow many valid orderings exist? List every valid ordering explicitly and verify each one satisfies all constraints."
+  },
+  {
+    "task_id": "R09",
+    "title": "Safe combination",
+    "topic": "combinatorics",
+    "prompt_style": "solve",
+    "content": "A safe uses a 4-digit code where the digits are arranged in positions 1, 2, 3, 4. The code has the following properties:\n\n1. All four digits are different.\n2. No digit is 0.\n3. The first digit is exactly twice the last digit.\n4. The second digit is greater than the third digit.\n5. The sum of all four digits is 18.\n\nHow many valid codes are there? List every valid code and show how you systematically found them all."
+  },
+  {
+    "task_id": "R10",
+    "title": "Magic square",
+    "topic": "combinatorics",
+    "prompt_style": "solve",
+    "content": "A 3x3 magic square contains each of the integers 1 through 9 exactly once. Every row, every column, and both main diagonals must sum to the same 'magic constant.'\n\n(a) What is the magic constant for a 3x3 magic square containing 1-9?\n(b) The center cell must always contain the same number — what is it and why?\n(c) Given that the top-left cell contains 2 and the center contains 5, fill in the complete magic square. Show your logical deduction at each step."
+  },
+  {
+    "task_id": "R11",
+    "title": "Bayesian coin flip",
+    "topic": "probability",
+    "prompt_style": "solve",
+    "content": "A bag contains two coins: one fair coin (50% heads) and one biased coin (70% heads). You randomly pick one coin without looking and flip it three times. All three flips come up heads.\n\n(a) What is the probability you picked the biased coin, given the observed results? Use Bayes' theorem and show all steps.\n(b) If you flip the same coin a fourth time, what is the probability of getting heads, taking into account your updated belief about which coin you have?\n(c) How many consecutive heads would you need to observe before you are more than 95% certain you have the biased coin?"
+  },
+  {
+    "task_id": "R12",
+    "title": "Committee selection",
+    "topic": "combinatorics",
+    "prompt_style": "solve",
+    "content": "A committee of 5 people must be chosen from a group of 6 men and 4 women.\n\n(a) How many possible committees are there with no restrictions?\n(b) How many committees contain at least 2 women?\n(c) How many committees have strictly more men than women?\n(d) What is the probability that a randomly selected committee from part (a) has exactly 3 men and 2 women?\n\nShow all combinations calculations."
+  },
+  {
+    "task_id": "R13",
+    "title": "Monty Hall problem",
+    "topic": "probability",
+    "prompt_style": "solve",
+    "content": "In a game show, there are three doors. Behind one door is a car worth $30,000; behind each of the other two doors is a goat worth $0. You choose a door. The host, who knows what is behind each door, always opens a different door (not the one you chose) to reveal a goat. You then have the option to switch to the remaining unopened door.\n\n(a) If you always switch, what is your probability of winning the car? Prove this rigorously using conditional probability.\n(b) If you never switch, what is your probability of winning?\n(c) A ticket to play costs $8,000. What is the expected profit of always switching? Of never switching? Which strategy should you use?\n(d) Many people intuitively believe switching and staying are equally good. Give the clearest possible explanation for why this intuition is wrong."
+  },
+  {
+    "task_id": "R14",
+    "title": "Box volume optimization",
+    "topic": "optimization",
+    "prompt_style": "solve",
+    "content": "You want to build a rectangular box with a square base (width = depth = x) and height h. The box has no lid (open top). The total surface area of the box must equal exactly 300 cm².\n\n(a) Express the volume V as a function of x alone, by substituting the surface area constraint.\n(b) Find the value of x that maximizes the volume. Use calculus or another rigorous method.\n(c) What are the optimal dimensions (x and h), and what is the maximum volume?\n(d) Is the optimal box taller or shorter than it is wide? By what ratio?"
+  },
+  {
+    "task_id": "R15",
+    "title": "Compound interest comparison",
+    "topic": "finance",
+    "prompt_style": "solve",
+    "content": "You have $10,000 to invest. Account A offers 6% annual interest compounded annually. Account B offers 5.8% annual interest compounded monthly.\n\n(a) After exactly 5 years, which account has a higher balance? Calculate both balances to the nearest cent.\n(b) Is there a point in time (in complete years) where the accounts are equal or cross over? If so, when?\n(c) What single annual rate compounded annually would make Account B equivalent to Account A at exactly the 5-year mark? Express your answer as a percentage rounded to 4 decimal places.\n(d) After 20 years, what is the difference in balances between the two accounts?"
+  }
+]
