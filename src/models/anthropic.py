@@ -9,6 +9,7 @@ def run_trial(prompt: str, model: str = "claude-opus-4-8") -> dict:
     response = client.messages.create(
         model=model,
         thinking={"type": "adaptive"},
+        output_config={"effort": "high"},
         max_tokens=4096,
         messages=[{"role": "user", "content": prompt}],
     )

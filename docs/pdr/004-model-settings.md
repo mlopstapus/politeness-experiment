@@ -1,7 +1,7 @@
 # PDR-004: Model Settings for API Calls
 
 **Status:** Accepted
-**Date:** 2026-06-05
+**Date:** 2026-06-05 (updated 2026-06-08)
 
 ## Context
 
@@ -11,18 +11,20 @@ Reasoning tokens are a primary metric alongside input and output tokens.
 
 ## Decision
 
-### Claude: `claude-opus-4-8`
+### Claude: `claude-opus-4-8` and `claude-sonnet-4-6`
 
 ```python
 client.messages.create(
-    model="claude-opus-4-8",
+    model=model,
     thinking={"type": "adaptive"},
+    output_config={"effort": "high"},
     max_tokens=4096,
     messages=[{"role": "user", "content": prompt}]
 )
 ```
 
 - **Adaptive thinking**: Claude decides how much to think based on the prompt framing. This is the signal being measured.
+- **`effort: "high"`**: Explicitly sets the reasoning effort baseline to match GPT-5.5 (see below). Without this, Claude defaults to `high` anyway, but making it explicit ensures both providers are on equal footing and the setting is documented.
 - **No temperature parameter**: Opus 4.8 does not accept `temperature` — it returns a 400 error. This is acceptable; the experiment is measuring natural variance in reasoning, not trying to suppress it.
 - **`max_tokens=4096`**: High ceiling so thinking + output are never artificially truncated. Thinking tokens are tracked separately from output tokens on Claude and do not count toward this limit.
 
@@ -32,11 +34,12 @@ client.messages.create(
 client.chat.completions.create(
     model="gpt-5.5",
     max_completion_tokens=4096,
+    reasoning={"effort": "high"},
     messages=[{"role": "user", "content": prompt}]
 )
 ```
 
-- **No `reasoning_effort` override**: Default behavior (medium effort) lets GPT-5.5 reason as much as the prompt naturally elicits — the same philosophy as Claude's adaptive thinking.
+- **`reasoning: {"effort": "high"}`**: Matches the effort level set on Claude. GPT-5.5 previously defaulted to `medium`; this aligns both providers at `high`. `"high"` is the maximum level GPT-5.5 exposes (no `"max"` or `"xhigh"`), making it the natural cross-provider equivalence point.
 - **No `temperature` override**: Default temperature on GPT-5.5 is used. Setting temperature=0 would suppress reasoning variance, which is the opposite of what the experiment is measuring.
 - **`max_completion_tokens=4096`**: On GPT-5.5, reasoning tokens count toward this limit (unlike Claude where they are separate). High ceiling prevents truncation.
 
