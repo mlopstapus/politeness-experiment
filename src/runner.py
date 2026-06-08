@@ -103,7 +103,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", choices=MODELS + ["all"], default="all")
     parser.add_argument("--dry-run", action="store_true")
-    parser.add_argument("--seed", type=int, default=None)
+    parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
 
     corpus = load_corpus()
@@ -113,7 +113,7 @@ def main() -> None:
     if args.model != "all":
         all_trials = [(t, m, v, r) for t, m, v, r in all_trials if m == args.model]
 
-    seed = args.seed if args.seed is not None else random.randint(0, 2**32 - 1)
+    seed = args.seed
     random.seed(seed)
     random.shuffle(all_trials)
 
