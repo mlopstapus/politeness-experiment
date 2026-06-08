@@ -8,7 +8,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from tqdm import tqdm
 
-from src.schema import MODELS, VARIANTS, REPS, make_trial_id
+from src.schema import MODELS, VARIANTS, REPS, TASKS, make_trial_id
 from src.prompts import build_prompt
 from src.costs import calculate_cost
 
@@ -106,7 +106,7 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
 
-    corpus = load_corpus()
+    corpus = load_corpus()[:TASKS]
     completed = load_completed_trials()
     all_trials = generate_all_trials(corpus)
 

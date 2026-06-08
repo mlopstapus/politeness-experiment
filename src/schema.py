@@ -3,6 +3,7 @@ from typing import TypedDict
 MODELS = ["claude-opus-4-8", "claude-sonnet-4-6", "gpt-5.5"]
 VARIANTS = ["bare", "polite", "overly_polite"]
 REPS = 5
+TASKS = 15
 
 
 def make_trial_id(model: str, task_id: str, variant: str, rep: int) -> str:
